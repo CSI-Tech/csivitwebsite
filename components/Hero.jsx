@@ -32,11 +32,17 @@ export default function Hero() {
 
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
-                href="/events"
+                href="/teams"
                 className="group inline-flex items-center gap-3 border border-cream/70 px-6 py-3 font-mono text-xs tracking-widest2 text-cream uppercase transition-all hover:border-ochre hover:text-ochre"
               >
-                Enter the Society
+                Meet the Team
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                href="/#about"
+                className="group inline-flex items-center gap-2 border border-transparent px-5 py-3 font-mono text-xs tracking-widest2 text-cream/80 uppercase transition-all hover:text-cream"
+              >
+                About The Society
               </Link>
               <span className="hidden font-mono text-[11px] uppercase tracking-widest text-cream/60 md:inline">
                 A CSI VIT Production · 2026 – 27

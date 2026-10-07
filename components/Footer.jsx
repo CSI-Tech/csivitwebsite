@@ -6,7 +6,7 @@ import { Github, Instagram, Linkedin } from "lucide-react";
 
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname?.startsWith("/auth")) return null;
+  if (pathname?.startsWith("/auth") || pathname?.startsWith("/teams") || pathname?.startsWith("/profile")) return null;
 
   return (
     <footer className="mt-24 border-t border-sepia/40 bg-cream text-sepia">

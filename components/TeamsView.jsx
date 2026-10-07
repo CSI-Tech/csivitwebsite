@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { 
   ChevronLeft, 
   ChevronRight, 
   Instagram, 
   Linkedin, 
-  Github
+  Github,
+  ArrowLeft
 } from "lucide-react";
 import { DOMAINS, teamData } from "@/lib/teamData";
 
@@ -74,6 +76,17 @@ export default function TeamsView() {
           />
           {/* Subtle Ambient Warm Vignette */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#110b06]/30 via-transparent to-black/10 pointer-events-none" />
+        </div>
+
+        {/* Back to Society / Home button */}
+        <div className="absolute top-5 left-6 z-40">
+          <Link
+            href="/"
+            className="group flex items-center gap-2 px-4 py-2 rounded-sm bg-[#1c140d]/85 hover:bg-[#2e1d10] text-[#efe8db] border border-[#7a4a24]/60 backdrop-blur-sm font-mono text-xs uppercase tracking-widest transition-all hover:border-[#d99453] hover:text-[#d99453] shadow-lg hover:scale-105 active:scale-95"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" />
+            <span>Main Hall</span>
+          </Link>
         </div>
 
         {/* === LEFT SIDE: THE INTERACTIVE VINTAGE TV SCREEN === */}
@@ -276,6 +289,17 @@ export default function TeamsView() {
 
       {/* 2. RESPONSIVE MOBILE & TABLET ADAPTATION */}
       <div className="block lg:hidden px-4 py-6 max-w-2xl mx-auto space-y-6">
+        {/* Mobile Header / Back Button */}
+        <div className="flex items-center justify-between pb-2 border-b border-[#3a2a1a]">
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-[#efe8db] hover:text-[#d99453] transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Main Hall</span>
+          </Link>
+          <span className="font-stencil text-xs tracking-widest text-[#d99453]">CSI VIT</span>
+        </div>
         
         {/* Mobile TV Screen Showcase */}
         <div className="relative w-full rounded-2xl overflow-hidden bg-black/95 border-4 border-[#3a2a1a] shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
