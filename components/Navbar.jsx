@@ -10,8 +10,7 @@ import { useState } from "react";
 const links = [
   { href: "/", label: "Home" },
   { href: "/events", label: "Events" },
-  { href: "/teams", label: "Teams" },
-  { href: "/#about", label: "About" }
+  { href: "/teams", label: "Teams" }
 ];
 
 export default function Navbar() {
