@@ -60,7 +60,7 @@ export default async function EventPage({ params }) {
           <Detail label="Team size" value={event.teamSize || "Individual"} />
           <Detail
             label="Registration"
-            value={event.registrationOpen ? "OPEN" : "CLOSED"}
+            value={event.registrationOpen ? (event.registrationUrl ? "OPEN ON UNSTOP" : "OPEN") : "CLOSED"}
             tone={event.registrationOpen ? "open" : "closed"}
           />
         </div>
@@ -102,11 +102,17 @@ export default async function EventPage({ params }) {
         <p className="kicker">Take your seat</p>
         <h3 className="mt-2 font-display text-3xl text-ink md:text-4xl">
           {event.registrationOpen
-            ? "Registrations are open. Welcome aboard."
+            ? event.registrationUrl
+              ? "Registrations are hosted on Unstop. Claim your slot below."
+              : "Registrations are open. Welcome aboard."
             : "Registrations are currently closed."}
         </h3>
         <div className="mt-6">
-          <RegisterButton slug={event.slug} open={event.registrationOpen} />
+          <RegisterButton
+            slug={event.slug}
+            open={event.registrationOpen}
+            registrationUrl={event.registrationUrl}
+          />
         </div>
       </section>
     </PageTransition>

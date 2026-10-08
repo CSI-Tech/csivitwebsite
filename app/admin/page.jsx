@@ -47,6 +47,7 @@ export default function AdminPage() {
     image: "",
     poster: "",
     registrationOpen: true,
+    registrationUrl: "",
     features: "",
     rules: ""
   });
@@ -89,6 +90,7 @@ export default function AdminPage() {
       image: ev.image || "",
       poster: ev.poster || "",
       registrationOpen: ev.registrationOpen !== false,
+      registrationUrl: ev.registrationUrl || "",
       features: (ev.features || []).join("\n"),
       rules: (ev.rules || []).join("\n")
     });
@@ -111,6 +113,7 @@ export default function AdminPage() {
       image: "/images/choasbyDesign.jpeg",
       poster: "",
       registrationOpen: true,
+      registrationUrl: "",
       features: "Interactive hands-on session\nMentorship from CSI seniors\nCertificates for all participants",
       rules: "Individual or Team entry.\nDecision of judges is final."
     });
@@ -444,6 +447,19 @@ export default function AdminPage() {
                         className="w-full border border-sepia/60 bg-cream p-2.5 font-mono text-xs text-ink outline-none focus:border-rust"
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-xs uppercase text-ink font-bold mb-1">
+                      External Registration URL (e.g. Unstop link, leave empty for internal registration)
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.registrationUrl}
+                      onChange={(e) => setFormData({ ...formData, registrationUrl: e.target.value })}
+                      placeholder="https://unstop.com/competitions/..."
+                      className="w-full border border-sepia/60 bg-cream p-2.5 font-mono text-xs text-ink outline-none focus:border-rust"
+                    />
                   </div>
 
                   <div className="flex items-center gap-3">

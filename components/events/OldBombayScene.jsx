@@ -141,13 +141,25 @@ export default function OldBombayScene({ events = [] }) {
             </div>
 
             {/* Direct action link overlay */}
-            <Link
-              href={`/events/${currentEvent.slug}`}
-              className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 inline-flex items-center gap-1.5 whitespace-nowrap border border-rust bg-[#1a1714] px-3 py-1 font-mono text-[8.5px] uppercase tracking-widest text-cream shadow-md transition-all hover:bg-rust"
-            >
-              <span>Register Now</span>
-              <ArrowUpRight className="h-3 w-3" />
-            </Link>
+            {currentEvent.registrationUrl ? (
+              <a
+                href={currentEvent.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 inline-flex items-center gap-1.5 whitespace-nowrap border border-rust bg-[#1a1714] px-3 py-1 font-mono text-[8.5px] uppercase tracking-widest text-cream shadow-md transition-all hover:bg-rust"
+              >
+                <span>Register on Unstop</span>
+                <ArrowUpRight className="h-3 w-3" />
+              </a>
+            ) : (
+              <Link
+                href={`/events/${currentEvent.slug}`}
+                className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 inline-flex items-center gap-1.5 whitespace-nowrap border border-rust bg-[#1a1714] px-3 py-1 font-mono text-[8.5px] uppercase tracking-widest text-cream shadow-md transition-all hover:bg-rust"
+              >
+                <span>{currentEvent.registrationOpen !== false ? "Register Now" : "View Dispatch"}</span>
+                <ArrowUpRight className="h-3 w-3" />
+              </Link>
+            )}
           </div>
         </div>
 
@@ -160,12 +172,23 @@ export default function OldBombayScene({ events = [] }) {
             <div className="relative h-full w-full overflow-hidden rounded-[7px]">
               <VintagePosterArt event={currentEvent} size="board" />
             </div>
-            <Link
-              href={`/events/${currentEvent.slug}`}
-              className="mt-2 block w-full text-center border border-rust bg-[#1a1714] py-1 font-mono text-[9px] uppercase tracking-widest text-cream hover:bg-rust transition-colors"
-            >
-              Register Now →
-            </Link>
+            {currentEvent.registrationUrl ? (
+              <a
+                href={currentEvent.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block w-full text-center border border-rust bg-[#1a1714] py-1 font-mono text-[9px] uppercase tracking-widest text-cream hover:bg-rust transition-colors"
+              >
+                Register on Unstop →
+              </a>
+            ) : (
+              <Link
+                href={`/events/${currentEvent.slug}`}
+                className="mt-2 block w-full text-center border border-rust bg-[#1a1714] py-1 font-mono text-[9px] uppercase tracking-widest text-cream hover:bg-rust transition-colors"
+              >
+                {currentEvent.registrationOpen !== false ? "Register Now →" : "View Dispatch →"}
+              </Link>
+            )}
           </div>
         </div>
 

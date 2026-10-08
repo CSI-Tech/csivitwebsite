@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Ticket, Loader2, X, Users, User, ArrowUpRight } from "lucide-react";
 
-export default function RegisterButton({ slug, open }) {
+export default function RegisterButton({ slug, open, registrationUrl }) {
   const { data: session, status } = useSession();
   const [registered, setRegistered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -132,6 +132,27 @@ export default function RegisterButton({ slug, open }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  // If there's an external direct registration link (e.g. Unstop)
+  if (registrationUrl) {
+    return (
+      <div className="flex flex-col items-center gap-3">
+        <a
+          href={registrationUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-ticket inline-flex items-center gap-2.5 text-base px-8 py-3.5 shadow-lg hover:shadow-xl transition-all"
+        >
+          <Ticket className="h-5 w-5" />
+          <span>Register on Unstop</span>
+          <ArrowUpRight className="h-4 w-4" />
+        </a>
+        <p className="font-mono text-[11px] uppercase tracking-widest text-muted">
+          Official Unstop Registration Portal · 3-Player Team Challenge
+        </p>
+      </div>
+    );
   }
 
   if (!open) {

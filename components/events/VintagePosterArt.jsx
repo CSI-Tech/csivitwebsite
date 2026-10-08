@@ -63,6 +63,17 @@ export default function VintagePosterArt({ event, size = "board", isHovered = fa
       gazetteVol: "SPECIAL DISPATCH",
       stampCode: "EVIL UX · 13 OCT"
     };
+  } else if (slug.includes("sync")) {
+    theme = {
+      paperBg: "#e5edf3",
+      ink: "#0f1c24",
+      accent: "#1f6e8c",
+      secondary: "#183241",
+      halftoneColor: "rgba(15, 28, 36, 0.25)",
+      variantName: "ASYMMETRIC COMMS & TECH TRIAL",
+      gazetteVol: "SPECIAL TRIAL",
+      stampCode: "SYNC · 14 OCT"
+    };
   } else if (slug.includes("codecrush")) {
     theme = {
       paperBg: "#efe5d0",

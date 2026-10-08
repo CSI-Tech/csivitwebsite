@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "CSI VIT — The Insider",
+  title: "CSI VIT — Student Chapter",
   description:
     "Computer Society of India, VIT Student Chapter. Tenure 2026–27. Where logic meets deception.",
   metadataBase: new URL("http://localhost:3000")
