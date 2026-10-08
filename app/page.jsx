@@ -48,12 +48,12 @@ export default function HomePage() {
                 The Minds Behind The Chapter
               </h3>
               <p className="mt-3 font-body text-sm text-sepia/80 leading-relaxed">
-                Step inside the vintage room. Meet the conveners, domain heads, and 
+                Step inside the vintage room. Meet the conveners, domain heads, and
                 creators orchestrating the 2026–27 tenure across 9 specialized departments.
               </p>
             </div>
-            <Link 
-              href="/teams" 
+            <Link
+              href="/teams"
               className="btn-ticket whitespace-nowrap self-start md:self-center"
             >
               Explore The Team Room <ArrowRight className="h-4 w-4 ml-1" />

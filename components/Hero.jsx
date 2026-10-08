@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
@@ -50,6 +51,15 @@ export default function Hero() {
             </div>
           </div>
         </div>
+
+        <Image
+          src="/images/csi-logo-white.png"
+          alt="CSI VIT"
+          width={220}
+          height={68}
+          priority
+          className="absolute bottom-5 right-4 z-[3] h-9 w-auto object-contain opacity-95 md:bottom-8 md:right-8 md:h-12"
+        />
 
         {/* corner metadata like a film reel */}
         <div className="absolute left-4 top-4 z-[3] font-mono text-[10px] uppercase tracking-widest text-cream/70">

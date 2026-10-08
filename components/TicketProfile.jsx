@@ -3,7 +3,7 @@
 import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import TransparentSeal from "./TransparentSeal";
+import Image from "next/image";
 import { Ticket, ArrowLeft, LogOut, Download, Check, Calendar, MapPin, Users, ArrowUpRight } from "lucide-react";
 import { seedEvents } from "@/lib/events-data";
 
@@ -117,14 +117,21 @@ export default function TicketProfile() {
             <div className="relative grid grid-cols-[1.35fr_0.65fr] items-stretch border-b border-[#a35a25]/40">
               {/* Left Orange Section */}
               <div
-                className="relative flex items-center px-4 py-3 sm:px-6 sm:py-4"
+                className="relative flex flex-col items-start justify-center px-4 py-3 sm:px-6 sm:py-4"
                 style={{ background: "#a35a25", color: "#efe8db" }}
               >
+                <Image
+                  src="/images/csi-logo-white.png"
+                  alt="CSI VIT"
+                  width={170}
+                  height={53}
+                  className="h-7 w-auto object-contain sm:h-9 md:h-11"
+                />
                 <p
-                  className="font-mono text-base font-bold leading-tight tracking-widest uppercase sm:text-lg md:text-2xl"
+                  className="mt-1 font-mono text-xs font-bold leading-tight tracking-widest uppercase sm:text-sm md:text-base"
                   style={{ fontFamily: "var(--font-mono, 'VT323', monospace)" }}
                 >
-                  CSI - VIT,<br />STUDENT CHAPTER
+                  Student Chapter
                 </p>
               </div>
 
@@ -141,11 +148,6 @@ export default function TicketProfile() {
                 </p>
               </div>
 
-              {/* Transparent CSI VIT Seal Straddling Header */}
-              <TransparentSeal
-                className="pointer-events-none absolute left-[62%] top-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 object-contain sm:h-16 sm:w-16 md:h-20 md:w-20 drop-shadow-md"
-                alt="CSI VIT seal"
-              />
             </div>
 
             {/* 2. BODY SECTIONS */}
