@@ -26,6 +26,7 @@ export default function EventCard({ event, size = "md" }) {
       <div className="relative overflow-hidden">
         <div className="transition-transform duration-700 group-hover:scale-[1.03]">
           <Poster
+            event={event}
             variant={event.poster || event.slug}
             title={event.title.toUpperCase()}
             category={event.category}

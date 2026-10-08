@@ -145,7 +145,7 @@ export default function OldBombayScene({ events = [] }) {
               href={`/events/${currentEvent.slug}`}
               className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 inline-flex items-center gap-1.5 whitespace-nowrap border border-rust bg-[#1a1714] px-3 py-1 font-mono text-[8.5px] uppercase tracking-widest text-cream shadow-md transition-all hover:bg-rust"
             >
-              <span>Examine Details</span>
+              <span>Register Now</span>
               <ArrowUpRight className="h-3 w-3" />
             </Link>
           </div>
@@ -162,9 +162,9 @@ export default function OldBombayScene({ events = [] }) {
             </div>
             <Link
               href={`/events/${currentEvent.slug}`}
-              className="mt-2 block w-full text-center border border-rust bg-[#1a1714] py-1 font-mono text-[9px] uppercase tracking-widest text-cream"
+              className="mt-2 block w-full text-center border border-rust bg-[#1a1714] py-1 font-mono text-[9px] uppercase tracking-widest text-cream hover:bg-rust transition-colors"
             >
-              Examine Details & Register →
+              Register Now →
             </Link>
           </div>
         </div>

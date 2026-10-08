@@ -4,7 +4,8 @@ import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import TransparentSeal from "./TransparentSeal";
-import { Ticket, ArrowLeft, LogOut, Download, Check } from "lucide-react";
+import { Ticket, ArrowLeft, LogOut, Download, Check, Calendar, MapPin, Users, ArrowUpRight } from "lucide-react";
+import { seedEvents } from "@/lib/events-data";
 
 export default function TicketProfile() {
   const { data: session, status } = useSession();
@@ -12,6 +13,8 @@ export default function TicketProfile() {
   const [email, setEmail] = useState("");
   const [regDate, setRegDate] = useState("date of registration");
   const [saved, setSaved] = useState(false);
+  const [registrations, setRegistrations] = useState([]);
+  const [loadingRegs, setLoadingRegs] = useState(true);
 
   useEffect(() => {
     if (session?.user) {
@@ -21,17 +24,44 @@ export default function TicketProfile() {
     }
   }, [session]);
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
-  };
+  // Load user registered passes
+  useEffect(() => {
+    let localRegs = [];
+    try {
+      localRegs = JSON.parse(localStorage.getItem("csi_user_registrations") || "[]");
+    } catch {}
+
+    async function fetchServerRegs() {
+      const targetEmail = session?.user?.email || email;
+      try {
+        if (targetEmail) {
+          const res = await fetch(`/api/user/registrations?email=${encodeURIComponent(targetEmail)}`);
+          const data = await res.json();
+          if (data?.registrations?.length) {
+            // Merge server and local, avoiding duplicates
+            const slugs = new Set(data.registrations.map((r) => r.eventSlug || r.slug));
+            const extraLocal = localRegs.filter((lr) => !slugs.has(lr.slug || lr.eventSlug));
+            setRegistrations([...data.registrations, ...extraLocal]);
+            setLoadingRegs(false);
+            return;
+          }
+        }
+      } catch {}
+
+      // Fallback to local
+      setRegistrations(localRegs);
+      setLoadingRegs(false);
+    }
+
+    fetchServerRegs();
+  }, [session, email]);
 
   const handlePrint = () => {
     window.print();
   };
 
   return (
-    <div className="mx-auto w-full max-w-[820px] select-none">
+    <div className="mx-auto w-full max-w-[840px] select-none pb-12">
       {/* Top action controls */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4 font-mono text-xs uppercase tracking-widest text-[#efe8db]">
         <Link
@@ -41,6 +71,12 @@ export default function TicketProfile() {
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Society
         </Link>
         <div className="flex items-center gap-3">
+          <Link
+            href="/events"
+            className="flex items-center gap-2 px-3 py-1.5 rounded bg-[#1c140d]/80 hover:bg-[#2e1d10] border border-[#7a4a24]/60 transition-colors hover:text-[#d99453]"
+          >
+            <Ticket className="h-3.5 w-3.5" /> Browse Events
+          </Link>
           <button
             onClick={handlePrint}
             className="flex items-center gap-2 px-3 py-1.5 rounded bg-[#1c140d]/80 hover:bg-[#2e1d10] border border-[#7a4a24]/60 transition-colors hover:text-[#d99453]"
@@ -69,7 +105,7 @@ export default function TicketProfile() {
           className="mx-5 sm:mx-8 md:mx-10 p-3 sm:p-5 md:p-6"
           style={{ background: "#c9b7a5" }}
         >
-          {/* Outer Dashed Border Frame (Matching exact design) */}
+          {/* Outer Dashed Border Frame */}
           <div
             className="p-3 sm:p-4 md:p-5"
             style={{
@@ -161,7 +197,104 @@ export default function TicketProfile() {
               {/* DASHED DIVIDER */}
               <div className="dashed-rule-sepia" />
 
-              {/* SECTION 2: TERMS OF JOURNEY */}
+              {/* SECTION 2: REGISTERED EVENT PASSES */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p
+                    className="font-mono text-lg font-bold tracking-widest uppercase sm:text-xl md:text-2xl"
+                    style={{ fontFamily: "var(--font-mono, 'VT323', monospace)" }}
+                  >
+                    REGISTERED CONVOCATIONS & DISPATCHES
+                  </p>
+                  <span className="border border-[#a35a25] bg-[#a35a25]/10 px-2 py-0.5 font-mono text-xs uppercase tracking-widest text-[#a35a25] font-bold">
+                    {registrations.length} BOOKED
+                  </span>
+                </div>
+
+                {registrations.length === 0 ? (
+                  <div className="border border-dashed border-[#a35a25]/60 bg-[#cfc5b4]/50 p-4 text-center">
+                    <p
+                      className="font-mono text-base uppercase tracking-wider text-[#4a3b2c] sm:text-lg"
+                      style={{ fontFamily: "var(--font-mono, 'VT323', monospace)" }}
+                    >
+                      NO CONVOCATION PASSES DISPATCHED YET
+                    </p>
+                    <Link
+                      href="/events"
+                      className="mt-2 inline-flex items-center gap-1.5 border border-[#a35a25] bg-[#a35a25] px-3 py-1 font-mono text-xs uppercase tracking-widest text-[#efe8db] hover:bg-[#854519] transition-colors"
+                    >
+                      <span>Examine The Programme & Claim Seats</span>
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    {registrations.map((reg, idx) => {
+                      const slug = reg.eventSlug || reg.slug;
+                      const eventDetails =
+                        reg.event ||
+                        seedEvents.find((e) => e.slug === slug) || {
+                          title: reg.eventTitle || slug,
+                          date: "2026-10-13",
+                          time: "16:00 IST",
+                          venue: "VIT Mumbai"
+                        };
+
+                      return (
+                        <div
+                          key={slug + idx}
+                          className="relative flex flex-col justify-between gap-2 border-2 border-[#a35a25]/70 bg-[#ece4d5] p-3 sm:flex-row sm:items-center"
+                        >
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="inline-block h-2 w-2 rounded-full bg-[#a35a25]" />
+                              <h4
+                                className="font-mono text-xl font-bold uppercase text-[#1a1a1a] sm:text-2xl"
+                                style={{ fontFamily: "var(--font-mono, 'VT323', monospace)" }}
+                              >
+                                {eventDetails.title || reg.eventTitle || slug}
+                              </h4>
+                              {reg.type === "team" && (
+                                <span className="rounded bg-[#a35a25] px-1.5 py-0.2 font-mono text-[11px] uppercase text-[#efe8db]">
+                                  TEAM: {reg.teamName || "REGISTERED"}
+                                </span>
+                              )}
+                            </div>
+                            <div
+                              className="flex flex-wrap items-center gap-3 font-mono text-sm text-[#4a3b2c] sm:text-base"
+                              style={{ fontFamily: "var(--font-mono, 'VT323', monospace)" }}
+                            >
+                              <span>{eventDetails.date || "OCT 2026"}</span>
+                              <span>·</span>
+                              <span>{eventDetails.time || "16:00 IST"}</span>
+                              <span>·</span>
+                              <span>{eventDetails.venue || "VIT MUMBAI"}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span className="border border-[#a35a25] bg-[#a35a25]/15 px-2.5 py-1 font-mono text-xs uppercase tracking-widest text-[#a35a25] font-bold">
+                              ★ CONFIRMED PASS
+                            </span>
+                            <Link
+                              href={`/events/${slug}`}
+                              className="inline-flex items-center gap-1 border border-[#1a1a1a] bg-[#1a1a1a] px-2.5 py-1 font-mono text-xs uppercase tracking-widest text-[#efe8db] hover:bg-[#a35a25] transition-colors"
+                            >
+                              <span>Dossier</span>
+                              <ArrowUpRight className="h-3 w-3" />
+                            </Link>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* DASHED DIVIDER */}
+              <div className="dashed-rule-sepia" />
+
+              {/* SECTION 3: TERMS OF JOURNEY */}
               <div className="space-y-1.5">
                 <p
                   className="font-mono text-lg font-bold tracking-widest uppercase sm:text-xl md:text-2xl"
@@ -187,7 +320,7 @@ export default function TicketProfile() {
               {/* DASHED DIVIDER */}
               <div className="dashed-rule-sepia" />
 
-              {/* SECTION 3: JOURNEY MUST COMMENCE */}
+              {/* SECTION 4: JOURNEY MUST COMMENCE */}
               <div className="space-y-0.5">
                 <p
                   className="font-mono text-lg font-bold tracking-widest uppercase sm:text-xl md:text-2xl"
@@ -206,7 +339,7 @@ export default function TicketProfile() {
               {/* DASHED DIVIDER */}
               <div className="dashed-rule-sepia" />
 
-              {/* SECTION 4: ONE PASS, ONE PASSENGER. */}
+              {/* SECTION 5: ONE PASS, ONE PASSENGER. */}
               <div className="pt-1 pb-2">
                 <p
                   className="font-mono text-2xl font-bold tracking-widest uppercase sm:text-3xl md:text-4xl text-[#1a1a1a]"

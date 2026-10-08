@@ -20,6 +20,23 @@ function formatDateParts(dateStr) {
 export default function VintagePosterArt({ event, size = "board", isHovered = false }) {
   if (!event) return null;
 
+  if (event.image) {
+    return (
+      <article
+        className="relative flex h-full w-full select-none flex-col justify-between overflow-hidden rounded-[7px] border-2 border-ink shadow-sm bg-[#161412]"
+        aria-label={`Vintage event notice for ${event.title}`}
+      >
+        <img
+          src={event.image}
+          alt={event.title}
+          className="h-full w-full object-contain"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-sepia/10 mix-blend-multiply" />
+        <div className="pointer-events-none absolute inset-0 film-grain opacity-20" />
+      </article>
+    );
+  }
+
   const dateParts = formatDateParts(event.date);
   const slug = (event.slug || "").toLowerCase();
 
@@ -35,7 +52,18 @@ export default function VintagePosterArt({ event, size = "board", isHovered = fa
     stampCode: "BOM / 26"
   };
 
-  if (slug.includes("codecrush")) {
+  if (slug.includes("chaos")) {
+    theme = {
+      paperBg: "#fced9f",
+      ink: "#120e06",
+      accent: "#d93f18",
+      secondary: "#3a280e",
+      halftoneColor: "rgba(217, 63, 24, 0.24)",
+      variantName: "CHAOTIC UI EXPERIMENT",
+      gazetteVol: "SPECIAL DISPATCH",
+      stampCode: "EVIL UX · 13 OCT"
+    };
+  } else if (slug.includes("codecrush")) {
     theme = {
       paperBg: "#efe5d0",
       ink: "#11100f",
