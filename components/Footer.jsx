@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Github, Instagram, Linkedin } from "lucide-react";
 
@@ -14,6 +15,13 @@ export default function Footer() {
         <div className="rule-double mb-8" />
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
+            <Image
+              src="/images/csi-logo-dark.png"
+              alt="CSI VIT"
+              width={244}
+              height={76}
+              className="h-12 w-auto object-contain"
+            />
             <p className="font-stencil text-2xl tracking-widest" style={{ fontFamily: "var(--font-stencil)" }}>
               COMPUTER SOCIETY OF INDIA
             </p>

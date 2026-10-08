@@ -3,7 +3,7 @@
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import TransparentSeal from "./TransparentSeal";
+import Image from "next/image";
 
 export default function TicketAuth() {
   const { status } = useSession();
@@ -34,14 +34,21 @@ export default function TicketAuth() {
             <div className="relative grid grid-cols-[1.35fr_0.6fr] items-stretch">
               {/* left orange band */}
               <div
-                className="relative flex items-center px-3 py-3 sm:px-5 sm:py-4"
+                className="relative flex flex-col items-start justify-center px-3 py-3 sm:px-5 sm:py-4"
                 style={{ background: "#a35a25", color: "#efe8db" }}
               >
+                <Image
+                  src="/images/csi-logo-white.png"
+                  alt="CSI VIT"
+                  width={150}
+                  height={46}
+                  className="h-6 w-auto object-contain sm:h-8 md:h-9"
+                />
                 <p
-                  className="font-mono text-sm leading-tight tracking-widest uppercase sm:text-base md:text-lg"
+                  className="mt-1 font-mono text-[10px] leading-tight tracking-widest uppercase sm:text-xs md:text-sm"
                   style={{ fontFamily: "var(--font-mono)" }}
                 >
-                  CSI - VIT,<br />STUDENT CHAPTER
+                  Student Chapter
                 </p>
               </div>
               {/* right year box */}
@@ -56,11 +63,6 @@ export default function TicketAuth() {
                   2026-2027
                 </p>
               </div>
-              {/* Transparent CSI VIT seal, straddling the two bands */}
-              <TransparentSeal
-                className="pointer-events-none absolute left-[62%] top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 object-contain sm:h-14 sm:w-14 md:h-16 md:w-16"
-                alt="CSI VIT seal"
-              />
             </div>
 
             {/* BODY */}
