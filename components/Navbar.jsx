@@ -9,6 +9,7 @@ import { useState } from "react";
 const links = [
   { href: "/", label: "Home" },
   { href: "/events", label: "Events" },
+  { href: "/teams", label: "Teams" },
   { href: "/#about", label: "About" }
 ];
 
@@ -17,7 +18,7 @@ export default function Navbar() {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
 
-  if (pathname?.startsWith("/auth")) return null;
+  if (pathname?.startsWith("/auth") || pathname?.startsWith("/teams") || pathname?.startsWith("/profile")) return null;
 
   return (
     <header className="sticky top-0 z-40 border-b border-sepia/30 bg-paper/85 backdrop-blur-sm">
@@ -43,10 +44,15 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-3 md:flex">
           {session?.user ? (
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-[11px] uppercase tracking-widest text-muted">
-                {session.user.name?.split(" ")[0] || "Passenger"}
-              </span>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/profile"
+                className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-sepia hover:text-rust underline underline-offset-4"
+                title="View Passenger Pass"
+              >
+                <Ticket className="h-3 w-3" />
+                <span>{session.user.name?.split(" ")[0] || "Passenger"}</span>
+              </Link>
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
                 className="font-mono text-[11px] uppercase tracking-widest text-sepia hover:text-rust"
@@ -84,12 +90,21 @@ export default function Navbar() {
               </Link>
             ))}
             {session?.user ? (
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="text-left font-mono text-xs uppercase tracking-widest text-rust"
-              >
-                Logout
-              </button>
+              <>
+                <Link
+                  href="/profile"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-sepia"
+                >
+                  <Ticket className="h-3.5 w-3.5" /> My Pass ({session.user.name?.split(" ")[0] || "Passenger"})
+                </Link>
+                <button
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="text-left font-mono text-xs uppercase tracking-widest text-rust"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <Link href="/auth" className="btn-ticket w-fit">
                 <Ticket className="h-3.5 w-3.5" /> Get Your Ticket

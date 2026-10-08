@@ -1,79 +1,20 @@
 import Link from "next/link";
 import Masthead from "@/components/Masthead";
 import Hero from "@/components/Hero";
-import EventCard from "@/components/EventCard";
 import PageTransition from "@/components/PageTransition";
-import { seedEvents } from "@/lib/events-data";
-import Event from "@/models/Event";
-import { connectToDatabase } from "@/lib/mongodb";
 import { ArrowRight } from "lucide-react";
 
-async function loadEvents() {
-  try {
-    await connectToDatabase();
-    const db = await Event.find({}).sort({ date: 1 }).limit(3).lean();
-    if (db.length > 0) return db.map((e) => ({ ...e, _id: String(e._id) }));
-  } catch {}
-  return seedEvents.slice(0, 3);
-}
-
-export default async function HomePage() {
-  const events = await loadEvents();
-
+export default function HomePage() {
   return (
     <PageTransition>
       <Masthead />
       <Hero />
 
-      {/* Current Affairs */}
-      <section className="container-editorial page-in mt-24">
-        <div className="flex items-end justify-between border-b border-sepia/40 pb-4">
-          <div>
-            <p className="kicker">Section II</p>
-            <h2 className="mt-1 font-display text-4xl text-ink md:text-6xl">Current Affairs</h2>
-          </div>
-          <p className="hidden max-w-sm text-right font-body text-sm italic text-muted md:block">
-            The events currently running through the society. Pull a ticket, take a seat.
-          </p>
-        </div>
-
-        <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-6">
-          <div className="md:col-span-3">
-            <EventCard event={events[0]} />
-          </div>
-          <div className="md:col-span-3 md:mt-16">
-            <EventCard event={events[1]} />
-          </div>
-          <div className="md:col-span-4 md:col-start-2">
-            <EventCard event={events[2]} />
-          </div>
-        </div>
-
-        <div className="mt-10 flex justify-end">
-          <Link href="/events" className="btn-ghost">
-            The full programme <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
-      </section>
-
-      {/* Stamps strip */}
-      <section className="container-editorial mt-24 hidden md:block">
-        <div className="rule-double mb-6" />
-        <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-muted">
-          <span>Mumbai · 100</span>
-          <span>Est. 2008</span>
-          <span>Vol. XVIII</span>
-          <span>No. 01</span>
-          <span>Printed at VIT</span>
-        </div>
-        <div className="rule-double mt-6" />
-      </section>
-
-      {/* About */}
-      <section id="about" className="container-editorial page-in mt-24">
+      {/* About The Society */}
+      <section id="about" className="container-editorial page-in mt-20">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
           <div className="md:col-span-4">
-            <p className="kicker">Section III</p>
+            <p className="kicker">Section I · Origin</p>
             <h2 className="mt-2 font-display text-4xl text-ink md:text-5xl">The Society</h2>
           </div>
           <div className="md:col-span-8">
@@ -90,15 +31,52 @@ export default async function HomePage() {
 
             <div className="mt-8 grid grid-cols-3 divide-x divide-sepia/30 border border-sepia/30 bg-cream">
               <Stat k="17" v="Years running" />
-              <Stat k="42" v="Events / year" />
+              <Stat k="9" v="Key Domains" />
               <Stat k="600+" v="Members strong" />
             </div>
           </div>
         </div>
       </section>
 
+      {/* The Council / Teams Spotlight */}
+      <section className="container-editorial page-in mt-20">
+        <div className="border border-sepia/30 bg-cream p-8 md:p-12">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="max-w-xl">
+              <p className="kicker">Section II · The Architects</p>
+              <h3 className="mt-2 font-display text-3xl text-ink md:text-4xl">
+                The Minds Behind The Chapter
+              </h3>
+              <p className="mt-3 font-body text-sm text-sepia/80 leading-relaxed">
+                Step inside the vintage room. Meet the conveners, domain heads, and 
+                creators orchestrating the 2026–27 tenure across 9 specialized departments.
+              </p>
+            </div>
+            <Link 
+              href="/teams" 
+              className="btn-ticket whitespace-nowrap self-start md:self-center"
+            >
+              Explore The Team Room <ArrowRight className="h-4 w-4 ml-1" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Stamps strip */}
+      <section className="container-editorial mt-20 hidden md:block">
+        <div className="rule-double mb-6" />
+        <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-muted">
+          <span>Mumbai · 100</span>
+          <span>Est. 2008</span>
+          <span>Vol. XVIII</span>
+          <span>No. 01</span>
+          <span>Printed at VIT</span>
+        </div>
+        <div className="rule-double mt-6" />
+      </section>
+
       {/* CTA */}
-      <section className="container-editorial mt-24">
+      <section className="container-editorial mt-20 pb-12">
         <div className="rule-double mb-10" />
         <div className="flex flex-col items-center gap-6 text-center">
           <p className="kicker">A closing note</p>
