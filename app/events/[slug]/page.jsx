@@ -112,6 +112,7 @@ export default async function EventPage({ params }) {
             slug={event.slug}
             open={event.registrationOpen}
             registrationUrl={event.registrationUrl}
+            event={event}
           />
         </div>
       </section>

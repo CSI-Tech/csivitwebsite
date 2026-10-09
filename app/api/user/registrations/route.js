@@ -3,13 +3,16 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongodb";
 import Registration from "@/models/Registration";
+import Team from "@/models/Team";
 import Event from "@/models/Event";
-import { seedEvents, findSeedEvent } from "@/lib/events-data";
+import { findSeedEvent } from "@/lib/events-data";
 
 export async function GET(req) {
   const session = await getServerSession(authOptions);
   const url = new URL(req.url);
-  const email = url.searchParams.get("email") || session?.user?.email;
+  const email = (url.searchParams.get("email") || session?.user?.email || "")
+    .toLowerCase()
+    .trim();
 
   if (!email) {
     return NextResponse.json({ registrations: [] });
@@ -17,32 +20,70 @@ export async function GET(req) {
 
   try {
     await connectToDatabase();
-    const regs = await Registration.find({ email: email.toLowerCase().trim() })
+
+    // Teams this user belongs to (as leader or member).
+    const teams = await Team.find({ "members.email": email })
       .sort({ createdAt: -1 })
       .lean();
 
-    const results = await Promise.all(
-      regs.map(async (r) => {
-        let ev = await Event.findOne({ slug: r.eventSlug }).lean();
-        if (!ev) ev = findSeedEvent(r.eventSlug);
-        return {
-          ...r,
-          _id: String(r._id),
-          event: ev || {
-            title: r.eventTitle || r.eventSlug,
-            slug: r.eventSlug,
-            venue: "VIT Mumbai",
-            date: "2026-10-13",
-            time: "16:00 IST",
-            category: "Programme"
-          }
-        };
-      })
+    // Legacy individual registrations.
+    const regs = await Registration.find({ email })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Resolve event metadata for both sources.
+    async function withEvent(slug) {
+      let ev = await Event.findOne({ slug }).lean();
+      if (!ev) ev = findSeedEvent(slug);
+      return ev || {
+        title: slug,
+        slug,
+        venue: "VIT Mumbai",
+        date: "",
+        time: "",
+        category: "Programme"
+      };
+    }
+
+    const teamItems = await Promise.all(
+      teams.map(async (t) => ({
+        _id: String(t._id),
+        source: "team",
+        eventSlug: t.eventSlug,
+        eventTitle: t.eventTitle,
+        teamCode: t.teamCode,
+        teamName: t.teamName,
+        leaderEmail: t.leaderEmail,
+        isLeader: t.members.some((m) => m.email === email && m.isLeader),
+        memberCount: t.members.length,
+        maxSize: t.maxSize,
+        createdAt: t.createdAt,
+        event: await withEvent(t.eventSlug)
+      }))
     );
 
-    return NextResponse.json({ registrations: results });
+    const regItems = await Promise.all(
+      regs.map(async (r) => ({
+        ...r,
+        _id: String(r._id),
+        source: "individual",
+        event: await withEvent(r.eventSlug)
+      }))
+    );
+
+    // Deduplicate by eventSlug — teams win over legacy individual rows for
+    // the same event, since the team roster is the source of truth now.
+    const taken = new Set(teamItems.map((t) => t.eventSlug));
+    const filteredRegs = regItems.filter((r) => !taken.has(r.eventSlug));
+
+    return NextResponse.json({
+      registrations: [...teamItems, ...filteredRegs]
+    });
   } catch (err) {
-    // If DB is offline, return empty or mock
-    return NextResponse.json({ registrations: [] });
+    console.error("[user registrations] failed:", err?.message);
+    return NextResponse.json(
+      { error: "Database unavailable.", registrations: [] },
+      { status: 503 }
+    );
   }
 }

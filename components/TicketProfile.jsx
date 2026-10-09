@@ -24,33 +24,24 @@ export default function TicketProfile() {
     }
   }, [session]);
 
-  // Load user registered passes
+  // Load user registered passes from the server (Mongo-backed).
   useEffect(() => {
-    let localRegs = [];
-    try {
-      localRegs = JSON.parse(localStorage.getItem("csi_user_registrations") || "[]");
-    } catch {}
-
     async function fetchServerRegs() {
       const targetEmail = session?.user?.email || email;
+      if (!targetEmail) {
+        setRegistrations([]);
+        setLoadingRegs(false);
+        return;
+      }
       try {
-        if (targetEmail) {
-          const res = await fetch(`/api/user/registrations?email=${encodeURIComponent(targetEmail)}`);
-          const data = await res.json();
-          if (data?.registrations?.length) {
-            // Merge server and local, avoiding duplicates
-            const slugs = new Set(data.registrations.map((r) => r.eventSlug || r.slug));
-            const extraLocal = localRegs.filter((lr) => !slugs.has(lr.slug || lr.eventSlug));
-            setRegistrations([...data.registrations, ...extraLocal]);
-            setLoadingRegs(false);
-            return;
-          }
-        }
-      } catch {}
-
-      // Fallback to local
-      setRegistrations(localRegs);
-      setLoadingRegs(false);
+        const res = await fetch(`/api/user/registrations?email=${encodeURIComponent(targetEmail)}`);
+        const data = await res.json();
+        setRegistrations(data?.registrations || []);
+      } catch {
+        setRegistrations([]);
+      } finally {
+        setLoadingRegs(false);
+      }
     }
 
     fetchServerRegs();
