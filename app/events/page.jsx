@@ -11,7 +11,7 @@ export const metadata = {
   description:
     "An immersive Old Bombay street experience browsing the Computer Society of India, VIT Student Chapter events programme."
 };
-
+//function to load events
 async function loadEvents() {
   try {
     await connectToDatabase();
