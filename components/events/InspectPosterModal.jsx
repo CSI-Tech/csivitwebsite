@@ -41,8 +41,16 @@ export default function InspectPosterModal({ event, isOpen, onClose }) {
       <div className="relative z-10 flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden border-2 border-sepia/70 bg-[#f7f2e7] text-ink shadow-ticket md:flex-row">
         {/* Left: Physical Poster View */}
         <div className="relative flex aspect-[4/5] w-full items-center justify-center border-b border-sepia/40 bg-coal/90 p-4 md:w-5/12 md:border-b-0 md:border-r">
-          <div className="relative h-full max-h-[520px] w-full shadow-2xl">
-            <VintagePosterArt event={event} size="expanded" />
+          <div className="relative h-full max-h-[520px] w-full shadow-2xl flex items-center justify-center overflow-hidden rounded-[7px]">
+            {event.image ? (
+              <img
+                src={event.image}
+                alt={event.title}
+                className="h-full w-full object-contain rounded-[7px] border-2 border-sepia"
+              />
+            ) : (
+              <VintagePosterArt event={event} size="expanded" />
+            )}
           </div>
         </div>
 
@@ -127,7 +135,7 @@ export default function InspectPosterModal({ event, isOpen, onClose }) {
               className="btn-ticket inline-flex items-center gap-2"
               onClick={onClose}
             >
-              <span>View Full Event Dossier & Register</span>
+              <span>Register Now</span>
               <ArrowUpRight className="h-4 w-4" />
             </Link>
 

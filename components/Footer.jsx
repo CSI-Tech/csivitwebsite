@@ -38,8 +38,8 @@ export default function Footer() {
             <p className="kicker">Programme</p>
             <ul className="mt-3 space-y-2 font-mono text-[12px] uppercase tracking-widest">
               <li><Link href="/events" className="hover:text-rust">Events</Link></li>
+              <li><Link href="/teams" className="hover:text-rust">Our Team</Link></li>
               <li><Link href="/auth" className="hover:text-rust">Get a Ticket</Link></li>
-              <li><Link href="/#about" className="hover:text-rust">The Society</Link></li>
             </ul>
           </div>
 

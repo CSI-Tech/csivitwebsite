@@ -4,10 +4,16 @@ import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Calendar, Clock, MapPin, CheckCircle2 } from "lucide-react";
 import VintagePosterArt from "./VintagePosterArt";
+import EventRegistrationModal from "./EventRegistrationModal";
 
 export default function OldBombayScene({ events = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [turnDirection, setTurnDirection] = useState(null); // "forward" | "backward" | null
+  const [modalEvent, setModalEvent] = useState(null);
+  const openRegistration = (ev) => (e) => {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    setModalEvent(ev);
+  };
   const [isTurning, setIsTurning] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -141,13 +147,27 @@ export default function OldBombayScene({ events = [] }) {
             </div>
 
             {/* Direct action link overlay */}
-            <Link
-              href={`/events/${currentEvent.slug}`}
-              className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 inline-flex items-center gap-1.5 whitespace-nowrap border border-rust bg-[#1a1714] px-3 py-1 font-mono text-[8.5px] uppercase tracking-widest text-cream shadow-md transition-all hover:bg-rust"
-            >
-              <span>Examine Details</span>
-              <ArrowUpRight className="h-3 w-3" />
-            </Link>
+            {currentEvent.registrationUrl ? (
+              <a
+                href={currentEvent.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 inline-flex items-center gap-1.5 whitespace-nowrap border border-rust bg-[#1a1714] px-3 py-1 font-mono text-[8.5px] uppercase tracking-widest text-cream shadow-md transition-all hover:bg-rust"
+              >
+                <span>Register on Unstop</span>
+                <ArrowUpRight className="h-3 w-3" />
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={openRegistration(currentEvent)}
+                disabled={currentEvent.registrationOpen === false}
+                className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 inline-flex items-center gap-1.5 whitespace-nowrap border border-rust bg-[#1a1714] px-3 py-1 font-mono text-[8.5px] uppercase tracking-widest text-cream shadow-md transition-all hover:bg-rust disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <span>{currentEvent.registrationOpen !== false ? "Register Now" : "Registrations Closed"}</span>
+                <ArrowUpRight className="h-3 w-3" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -160,19 +180,33 @@ export default function OldBombayScene({ events = [] }) {
             <div className="relative h-full w-full overflow-hidden rounded-[7px]">
               <VintagePosterArt event={currentEvent} size="board" />
             </div>
-            <Link
-              href={`/events/${currentEvent.slug}`}
-              className="mt-2 block w-full text-center border border-rust bg-[#1a1714] py-1 font-mono text-[9px] uppercase tracking-widest text-cream"
-            >
-              Examine Details & Register →
-            </Link>
+            {currentEvent.registrationUrl ? (
+              <a
+                href={currentEvent.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block w-full text-center border border-rust bg-[#1a1714] py-1 font-mono text-[9px] uppercase tracking-widest text-cream hover:bg-rust transition-colors"
+              >
+                Register on Unstop →
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={openRegistration(currentEvent)}
+                disabled={currentEvent.registrationOpen === false}
+                className="mt-2 block w-full text-center border border-rust bg-[#1a1714] py-1.5 font-mono text-[9px] uppercase tracking-widest text-cream transition-colors hover:bg-rust disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {currentEvent.registrationOpen !== false ? "Register Now →" : "Registrations Closed"}
+              </button>
+            )}
           </div>
         </div>
 
         {/* Layer 3: FOREGROUND NEWSPAPER & HANDS WITH 3D PAGE TURN ANIMATION */}
         <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col items-center pointer-events-auto">
-          {/* 3D Newspaper Book / Broadsheet Container */}
-          <div className="relative w-full max-w-[680px] perspective-newspaper px-4 pb-2">
+          {/* 3D Newspaper Book / Broadsheet Container — desktop only;
+              on mobile the poster + its register button already covers this content. */}
+          <div className="relative hidden w-full max-w-[680px] perspective-newspaper px-4 pb-2 md:block">
             {/* The Newspaper Spread */}
             <div className="relative flex h-[190px] sm:h-[220px] md:h-[240px] w-full rounded-t-sm border-t-2 border-sepia/70 bg-[#ebe3d3] text-ink shadow-[0_-15px_35px_rgba(0,0,0,0.7)] preserve-3d">
               {/* Paper newsprint texture */}
@@ -254,13 +288,14 @@ export default function OldBombayScene({ events = [] }) {
                   <span className="font-mono text-[7px] sm:text-[8px] uppercase text-rust font-semibold">
                     {currentEvent.registrationOpen !== false ? "● REGISTRATIONS OPEN" : "● CONCLUDED"}
                   </span>
-                  <Link
-                    href={`/events/${currentEvent.slug}`}
-                    className="font-mono text-[7px] sm:text-[8px] uppercase underline underline-offset-2 hover:text-rust"
-                    onClick={(e) => e.stopPropagation()}
+                  <button
+                    type="button"
+                    onClick={openRegistration(currentEvent)}
+                    disabled={currentEvent.registrationOpen === false}
+                    className="font-mono text-[7px] sm:text-[8px] uppercase underline underline-offset-2 hover:text-rust disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    View Page →
-                  </Link>
+                    {currentEvent.registrationOpen !== false ? "Register →" : "Closed"}
+                  </button>
                 </div>
 
                 {/* Page Turn Dog-Ear Prompt */}
@@ -375,6 +410,14 @@ export default function OldBombayScene({ events = [] }) {
           </nav>
         </div>
       </div>
+
+      {/* Registration modal — opens inline on /events; replaces the old
+          navigation to /events/[slug] when clicking a poster or Register. */}
+      <EventRegistrationModal
+        event={modalEvent}
+        open={!!modalEvent}
+        onClose={() => setModalEvent(null)}
+      />
     </div>
   );
 }

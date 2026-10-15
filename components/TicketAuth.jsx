@@ -139,13 +139,17 @@ export default function TicketAuth() {
               style={{ background: "#d9d1c3" }}
             >
               <div className="dashed-rule mb-3.5 text-[#1a1a1a]/60 md:mb-4" />
-              <div className="flex flex-col items-stretch justify-between gap-2 sm:flex-row">
+              <div className="flex flex-col items-stretch justify-center gap-2 sm:flex-row">
                 <OAuthButton onClick={() => signIn("google", { callbackUrl })}>
                   SIGN UP USING GOOGLE
                 </OAuthButton>
-                <OAuthButton onClick={() => signIn("github", { callbackUrl })}>
-                  SIGN UP USING GITHUB
-                </OAuthButton>
+                {/* GitHub sign-in is hidden until the production OAuth client
+                    is provisioned. Flip NEXT_PUBLIC_ENABLE_GITHUB_AUTH=1 to show. */}
+                {process.env.NEXT_PUBLIC_ENABLE_GITHUB_AUTH === "1" && (
+                  <OAuthButton onClick={() => signIn("github", { callbackUrl })}>
+                    SIGN UP USING GITHUB
+                  </OAuthButton>
+                )}
               </div>
             </div>
 

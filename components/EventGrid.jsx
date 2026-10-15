@@ -5,6 +5,13 @@ export default function EventGrid({ events }) {
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-6">
       {events.map((event, i) => {
+        if (events.length === 2) {
+          return (
+            <div key={event.slug} className="md:col-span-3">
+              <EventCard event={event} />
+            </div>
+          );
+        }
         const layout = i % 5;
         let cls = "md:col-span-2";
         let offset = "";

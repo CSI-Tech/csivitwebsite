@@ -1,72 +1,113 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar, Users, Ticket } from "lucide-react";
+
+const navTiles = [
+  {
+    title: "EVENTS",
+    subtitle: "Upcoming & Past Events",
+    desc: "Hackathons, workshops and technical competitions.",
+    href: "/events",
+    icon: Calendar
+  },
+  {
+    title: "TEAM",
+    subtitle: "The 2026–27 Council",
+    desc: "Conveners, domain heads and core developers.",
+    href: "/teams",
+    icon: Users
+  },
+  {
+    title: "PROFILE / PASS",
+    subtitle: "Your Digital Boarding Pass",
+    desc: "Your event registrations and verified credentials.",
+    href: "/profile",
+    icon: Ticket
+  }
+];
 
 export default function Hero() {
   return (
-    <section className="relative isolate mt-6 overflow-hidden border-y border-sepia/40">
-      <div className="film-grain relative h-[78vh] min-h-[560px] w-full overflow-hidden vintage-overlay cinematic-overlay">
-        <div
-          className="absolute inset-0 animate-slowPan sepia-treatment"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1567861911437-538298e4232c?auto=format&fit=crop&w=2400&q=80')",
-            backgroundSize: "cover",
-            backgroundPosition: "center"
-          }}
-        />
-        <div className="absolute inset-0 z-[3] flex items-end">
-          <div className="container-editorial pb-14 md:pb-24">
-            <p className="kicker text-ochre/90">Feature Presentation · No. 01</p>
-            <h1
-              className="mt-4 font-hand text-[18vw] leading-[0.9] text-cream md:text-[10rem]"
-              style={{ fontFamily: "var(--font-hand)" }}
-            >
-              The Insider
-            </h1>
-            <p
-              className="mt-2 font-stencil text-lg tracking-widest2 text-cream/85 md:text-2xl"
-              style={{ fontFamily: "var(--font-stencil)" }}
-            >
-              WHERE LOGIC MEETS DECEPTION
-            </p>
+    <section className="relative isolate pt-6 pb-16">
+      <div className="container-editorial space-y-10">
+        {/* Central Branding — stripped back */}
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <Image
+            src="/images/csi-logo-dark.png"
+            alt="CSI VIT"
+            width={260}
+            height={80}
+            priority
+            className="h-16 w-auto object-contain sm:h-20"
+          />
 
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-              <Link
-                href="/teams"
-                className="group inline-flex items-center gap-3 border border-cream/70 px-6 py-3 font-mono text-xs tracking-widest2 text-cream uppercase transition-all hover:border-ochre hover:text-ochre"
-              >
-                Meet the Team
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                href="/#about"
-                className="group inline-flex items-center gap-2 border border-transparent px-5 py-3 font-mono text-xs tracking-widest2 text-cream/80 uppercase transition-all hover:text-cream"
-              >
-                About The Society
-              </Link>
-              <span className="hidden font-mono text-[11px] uppercase tracking-widest text-cream/60 md:inline">
-                A CSI VIT Production · 2026 – 27
-              </span>
-            </div>
+          <p className="mt-5 font-mono text-[11px] uppercase tracking-widest2 text-sepia">
+            Computer Society of India · VIT Student Chapter · 2026–27
+          </p>
+
+          <h1
+            className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl md:text-5xl"
+            style={{ fontFamily: "var(--font-display, serif)" }}
+          >
+            Where Innovation Meets Craft
+          </h1>
+
+          <p className="mt-4 max-w-xl font-body text-base text-sepia/85 sm:text-lg">
+            Empowering students through technology, hands-on engineering,
+            hackathons and collaborative innovation.
+          </p>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 font-mono text-xs uppercase tracking-widest">
+            <Link href="/events" className="btn-ticket">
+              <Calendar className="h-4 w-4" /> Explore Events
+            </Link>
+            <Link
+              href="/teams"
+              className="inline-flex items-center gap-2 rounded border border-sepia/40 bg-paper/90 px-5 py-2.5 text-sepia transition-all hover:bg-sepia hover:text-cream"
+            >
+              <Users className="h-4 w-4" /> Meet The Team
+            </Link>
           </div>
         </div>
 
-        <Image
-          src="/images/csi-logo-white.png"
-          alt="CSI VIT"
-          width={220}
-          height={68}
-          priority
-          className="absolute bottom-5 right-4 z-[3] h-9 w-auto object-contain opacity-95 md:bottom-8 md:right-8 md:h-12"
-        />
+        {/* 3 Navigation Hub Cards */}
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {navTiles.map((tile) => {
+            const Icon = tile.icon;
+            return (
+              <Link
+                key={tile.title}
+                href={tile.href}
+                className="group relative flex flex-col justify-between rounded-xl border border-sepia/30 bg-cream/80 p-6 transition-all duration-200 hover:-translate-y-1 hover:border-sepia hover:shadow-md"
+              >
+                <div>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-sepia/20 bg-paper text-sepia transition-colors group-hover:bg-sepia group-hover:text-cream">
+                    <Icon className="h-5 w-5" />
+                  </div>
 
-        {/* corner metadata like a film reel */}
-        <div className="absolute left-4 top-4 z-[3] font-mono text-[10px] uppercase tracking-widest text-cream/70">
-          REEL 01 · 24 FPS · CSI-VIT / MUMBAI
-        </div>
-        <div className="absolute right-4 top-4 z-[3] font-mono text-[10px] uppercase tracking-widest text-cream/70">
-          NO. 01 / IV
+                  <h3
+                    className="mt-4 font-stencil text-2xl tracking-wider text-ink transition-colors group-hover:text-rust"
+                    style={{ fontFamily: "var(--font-stencil, monospace)" }}
+                  >
+                    {tile.title}
+                  </h3>
+                  <p className="mt-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-sepia/90">
+                    {tile.subtitle}
+                  </p>
+                  <p className="mt-2.5 font-body text-sm leading-relaxed text-sepia/80">
+                    {tile.desc}
+                  </p>
+                </div>
+
+                <div className="mt-5 flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-widest text-sepia group-hover:text-rust">
+                  <span>Enter</span>
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

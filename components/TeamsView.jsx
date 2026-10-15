@@ -16,15 +16,15 @@ import { DOMAINS, teamData } from "@/lib/teamData";
 // Responsive coordinate percentages mapped directly to the 9 framed artwork sections
 // The background image aspect ratio is 16:9 (1920x1080)
 const FRAME_POSITIONS = {
-  convener: { top: "6.0%", left: "65.5%", width: "9.3%", height: "19.5%" },
-  executives: { top: "6.0%", left: "75.8%", width: "9.3%", height: "19.5%" },
-  operations: { top: "6.0%", left: "86.1%", width: "9.8%", height: "19.5%" },
-  technical: { top: "27.5%", left: "65.5%", width: "9.3%", height: "19.5%" },
-  design: { top: "27.5%", left: "75.8%", width: "9.3%", height: "19.5%" },
-  pr: { top: "27.5%", left: "86.1%", width: "9.8%", height: "19.5%" },
-  digitalMarketing: { top: "49.0%", left: "65.5%", width: "9.3%", height: "19.5%" },
-  editorials: { top: "49.0%", left: "75.8%", width: "9.3%", height: "19.5%" },
-  filmMedia: { top: "49.0%", left: "86.1%", width: "9.8%", height: "19.5%" }
+  convener: { top: "9.5%", left: "66.5%", width: "9.3%", height: "18.5%" },
+  executives: { top: "8.5%", left: "76.8%", width: "9.3%", height: "18.5%" },
+  operations: { top: "5.5%", left: "87.0%", width: "9.8%", height: "18.5%" },
+  technical: { top: "31.5%", left: "66.5%", width: "9.3%", height: "18.5%" },
+  design: { top: "30.0%", left: "76.8%", width: "9.3%", height: "18.5%" },
+  pr: { top: "28.0%", left: "87.0%", width: "9.8%", height: "18.5%" },
+  digitalMarketing: { top: "52.5%", left: "66.5%", width: "9.3%", height: "18.5%" },
+  editorials: { top: "52.0%", left: "76.8%", width: "9.3%", height: "18.5%" },
+  filmMedia: { top: "51.5%", left: "87.0%", width: "9.8%", height: "18.5%" }
 };
 
 export default function TeamsView() {

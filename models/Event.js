@@ -16,7 +16,8 @@ const EventSchema = new mongoose.Schema(
     poster: { type: String, default: "" },
     features: { type: [String], default: [] },
     rules: { type: [String], default: [] },
-    registrationOpen: { type: Boolean, default: true }
+    registrationOpen: { type: Boolean, default: true },
+    registrationUrl: { type: String, default: "" }
   },
   { timestamps: true }
 );

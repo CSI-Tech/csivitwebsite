@@ -11,12 +11,12 @@ export default function EventHero({ event }) {
 
         {/* posters left/right */}
         <div className="pointer-events-none absolute inset-y-6 left-2 hidden w-24 flex-col gap-4 md:flex">
-          <MiniPoster label="CODE RUSH" />
-          <MiniPoster label="HACKATHON" />
+          <MiniPoster label="CHAOS UX" />
+          <MiniPoster label="SYNC / SINK" />
         </div>
         <div className="pointer-events-none absolute inset-y-6 right-2 hidden w-24 flex-col gap-4 md:flex">
-          <MiniPoster label="TECH TALKS" />
-          <MiniPoster label="IDEATHON" />
+          <MiniPoster label="CSI VIT" />
+          <MiniPoster label="BOMBAY 26" />
         </div>
 
         {/* the screen */}
